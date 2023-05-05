@@ -15,9 +15,8 @@
 <br>
 
 <div align="center">
-|IONIC-MASK|
-| -------------- |
- ![IonicMask](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDk1ZWRiNDU4ZWZhYmVjNzllMzA0ZDg1MDg2YjUxZjUyNWQwY2EwMiZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/HmyFiUMAXT9RUAEHiq/giphy.gif)|
+  <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDk1ZWRiNDU4ZWZhYmVjNzllMzA0ZDg1MDg2YjUxZjUyNWQwY2EwMiZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/HmyFiUMAXT9RUAEHiq/giphy.gif" alt="example-ionic-mask" width="" height=""/>
+
 </div>
 
 # @ionic-mask
