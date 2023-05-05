@@ -1,0 +1,11 @@
+version: '3.0'
+
+services:
+  app:
+    image: teste-ionic-mask
+    privileged: true 
+    container_name : teste-ionic-mask
+    volumes:
+      - ./:/projeto/
+    network_mode: "host"
+    command: ["sleep","infinity"]

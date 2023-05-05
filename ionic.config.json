@@ -1,0 +1,7 @@
+{
+  "name": "teste-ionic-mask",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

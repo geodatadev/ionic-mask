@@ -1,0 +1,66 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Ionic Mask
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+    
+    <form [formGroup]="form">
+
+        <ion-item>
+            <ion-label position="floating">
+                Prefix (R$)
+            </ion-label>
+            <ion-input formControlName="prefixReal" type="number" [ionic-mask]="{prefix: 'R$'}" value=""></ion-input>
+            <ion-note>Output: {{form.value.prefixReal}}</ion-note>
+
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="stacked">
+                Prefix (U$) Fixed
+            </ion-label>
+            <ion-input formControlName="prefixDolar" type="number" [ionic-mask]="{prefix: 'U$', type: 'number', fixed_morpheme: true}" value=""></ion-input>
+            <ion-note>Output: {{form.value.prefixDolar}}</ion-note>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">
+                Sufix
+            </ion-label>
+            <ion-input formControlName="sufix" type="text" [ionic-mask]="{sufix: '@email.com',  type: 'text', fixed_morpheme: false}" value=""></ion-input>
+            <ion-note>Output: {{form.value.sufix}}</ion-note>
+        </ion-item>
+        
+        <ion-item>
+            <ion-label position="stacked">
+                Sufix Fixed
+            </ion-label>
+            <ion-input formControlName="sufixFixed" type="text" [ionic-mask]="{sufix: '@email.com', fixed_morpheme: true,  type: 'text'}" value=""></ion-input>
+            <ion-note>Output: {{form.value.sufixFixed}}</ion-note>
+        </ion-item>
+
+        <ion-item lines="full">
+            <ion-label position="stacked">
+                Separators (thousands '.' and decimals ',')
+            </ion-label>
+            <ion-input  formControlName="separators"  type="text" [ionic-mask]="{type: 'number', thousand_separator: '.', decimal_separator: ','}" value=""></ion-input>
+            <ion-note>Output: {{form.value.separators}}</ion-note>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="stacked">
+                Decimal places (3)
+            </ion-label>
+            <ion-input formControlName="decimal" type="text" [ionic-mask]="{ decimal_places: 3}" value=""></ion-input>
+            <ion-note>Output: {{form.value.decimal}}</ion-note>
+        </ion-item>
+
+    
+    </form>
+    
+</ion-content>
+  
