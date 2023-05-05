@@ -4,6 +4,7 @@
  */
 export interface IonicMaskInterface {
         
+    type?: string
     prefix?: string
     sufix?: string
     fixed_morpheme?: boolean

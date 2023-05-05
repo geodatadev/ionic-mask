@@ -34,11 +34,10 @@ export class IonicMaskDirective {
             type: this.dataMask.type || 'number',
             prefix: this.dataMask.prefix || null,
             sufix: this.dataMask.sufix || null,
-            fixed_morpheme: this.dataMask.fixed_morpheme || null,
+            fixed_morpheme: this.dataMask.fixed_morpheme || false,
             thousand_separator: this.dataMask.thousand_separator || '.',
             decimal_separator: this.dataMask.decimal_separator || ',',
             decimal_places: this.dataMask.decimal_places || 2,
-            toLocale: this.dataMask.toLocale || null,
         }
 
         
