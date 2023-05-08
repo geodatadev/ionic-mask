@@ -15,7 +15,7 @@ export class Tab1Page {
 
     ) { 
         this.form = this.fb.group({
-            prefixReal: [15415.65],
+            prefixReal: [15415.6],
             prefixDolar: [null],
             sufix: [null],
             sufixFixed: [null],

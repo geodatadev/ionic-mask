@@ -109,7 +109,7 @@ export class IonicMaskDirective {
             if(this.params.type == 'number' ){
 
                 // Limpa o texto de entrada permitindo somente números
-                this.auxInput.value = currentValue.replace(/\D/g, '');
+                this.auxInput.value = currentValue.replace(/\D\./g, '');
                 
                 // this._ref.nativeElement.value = this.auxInput.value;
                 
@@ -240,9 +240,20 @@ export class IonicMaskDirective {
 
         let value: any = this.auxInput.value;
 
-        this.decimalPart = value.substring(value.length - this.params.decimal_places);
-        this.integerPart = value.substring(0, value.length - this.params.decimal_places);
+        // se primeira formatação realiza o split e divide as partes do número
+        if(!this.integerPart && !this.decimalPart){
 
+            [this.integerPart, this.decimalPart] = String(value).split('.');
+
+        }else{
+
+            // retira os pontos e vírgulas deixando somente números
+            value = value.replace(/\D/g, '');
+
+            this.decimalPart = value.substring(value.length - this.params.decimal_places);
+            this.integerPart = value.substring(0, value.length - this.params.decimal_places);
+        }
+        
         value = `${this.integerPart}${this.params.decimal_separator}${this.decimalPart}`;
 
         this.auxInput.value = value;
