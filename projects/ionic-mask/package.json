@@ -1,12 +1,18 @@
 {
-  "name": "ionic-mask",
-  "version": "0.0.1",
-  "peerDependencies": {
-    "@angular/common": "^15.2.0",
-    "@angular/core": "^15.2.0"
-  },
-  "dependencies": {
-    "tslib": "^2.3.0"
-  },
-  "sideEffects": false
+    "name": "ionic-mask",
+    "version": "0.0.5",
+    "peerDependencies": {
+        "@angular/common": "^15.2.0",
+        "@angular/core": "^15.2.0"
+    },
+    "dependencies": {
+        "tslib": "^2.3.0"
+    },
+    "sideEffects": false,
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/geodatadev/ionic-mask.git"
+    },
+    "homepage": "https://github.com/geodatadev/ionic-mask",
+    "license": "MIT"
 }

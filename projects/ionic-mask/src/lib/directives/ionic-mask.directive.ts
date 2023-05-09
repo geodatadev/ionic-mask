@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener, inject, Input } from '@angular/core';
+import { ChangeDetectorRef, Directive, ElementRef, HostListener, inject, Input } from '@angular/core';
 
 @Directive({
     selector: '[ionic-mask]'
@@ -12,12 +12,14 @@ export class IonicMaskDirective {
     public originalValue: any;
     public auxInput: any;
     public defaultInput: any;
+    public defaultValue: any;
 
     // inputs
     @Input('ionic-mask') dataMask: any = null;
 
     // injects
     private _ref = inject(ElementRef);
+    private _changeDetectorRef = inject(ChangeDetectorRef);
 
     /**
      * Construct
@@ -39,7 +41,6 @@ export class IonicMaskDirective {
             decimal_separator: this.dataMask.decimal_separator || ',',
             decimal_places: this.dataMask.decimal_places || 2,
         }
-
         
     }
     /**
@@ -60,7 +61,7 @@ export class IonicMaskDirective {
 
         // Se há input padrão e não foi criado input auxiliar então cria o auxiliar para servir de "display"
         if(this.defaultInput && !this.auxInput) {
-            
+
             this.defaultInput.type = 'hidden';
             
             this.auxInput = document.createElement('input');
@@ -80,15 +81,23 @@ export class IonicMaskDirective {
 
                 this.setMorpheme();
             }
-            if(this.defaultInput.value) {
 
-                this.auxInput.value = this.defaultInput.value;
-                
-                setTimeout(() => {
-                    var event = new Event('input');          
-                    this.auxInput.dispatchEvent(event);
-                }, 500);
+        }
+
+        // se há valor na inicialização então extrai parte decimal e inteira
+        if(this.defaultInput && this.defaultInput.value && !this.auxInput.value) {
+
+            this.auxInput.value = this.defaultInput.value;
+            this.defaultValue = this.auxInput.value.replace(/\D\./g, '');
+            
+            // dividindo o valor em duas partes (integer e decimal)
+            [this.integerPart, this.decimalPart] = String(this.defaultValue).split('.');
+            if(this.integerPart && !this.decimalPart){
+                this.decimalPart = 0;
             }
+            
+            var event = new Event('input');          
+            this.auxInput.dispatchEvent(event);
 
         }
 
@@ -99,25 +108,33 @@ export class IonicMaskDirective {
      */
     private apply() {
 
-        let currentValue = this.auxInput.value;
+        let value = this.defaultValue ? this.defaultValue : this.auxInput.value;
         
-        if (currentValue) {
+        if (value) {
             // seta morphema(prefix ou sufix), se enviado
             this.setMorpheme();
 
 
             if(this.params.type == 'number' ){
 
-                // Limpa o texto de entrada permitindo somente números
-                this.auxInput.value = currentValue.replace(/\D\./g, '');
-                
-                // this._ref.nativeElement.value = this.auxInput.value;
+                // Limpa o texto de entrada permitindo somente números se não há valor incial
+                if(!this.defaultValue){
+
+                    value = value.replace(/\D/g, '');
+                    // dividindo o valor em duas partes (integer e decimal)
+                    this.decimalPart = value.substring(value.length - this.params.decimal_places);
+                    this.integerPart = value.substring(0, value.length - this.params.decimal_places);
+                    
+                }else{
+                    //seta valor default para nulo pois já foi utilizado
+                    this.defaultValue = null;
+                }
                 
                 this.formatDecimalPlaces();
                 this.formatSeparators();
+
             }
 
-            
         }else{
             
             // se não é fixo se não há valor valido remove o prefixo/sufixo para não atrabalhar no label floating
@@ -137,16 +154,15 @@ export class IonicMaskDirective {
 
         let val = null;
         
-
-        if(this.params.type == 'number' && this.decimalPart){
+        if(this.params.type == 'number' && this.decimalPart !== null && this.decimalPart !== "" ){
             // para o tipo number monta formatação de acordo com os parametros
             
             let integerPart = this.integerPart || 0 ;
             val = Number(`${integerPart}.${this.decimalPart}`);
-            
+
         }else if(this.params.type != 'number' && this.auxInput.value){
             // para o tipo diferente de number (text), insere o valor sem formatação
-
+            
             val = this.auxInput.value;
             
         } else {
@@ -158,7 +174,6 @@ export class IonicMaskDirective {
             }
 
             this.auxInput.value = val;
-
         }
         
         this.defaultInput.value = val;
@@ -234,28 +249,11 @@ export class IonicMaskDirective {
     }
 
     /**
-     * Formata as casas decimais do valor, dividindo o valor em duas partes (integer e decimal)
+     * Formata as casas decimais do valor.
      */
     private formatDecimalPlaces(): void {
-
-        let value: any = this.auxInput.value;
-
-        // se primeira formatação realiza o split e divide as partes do número
-        if(!this.integerPart && !this.decimalPart){
-
-            [this.integerPart, this.decimalPart] = String(value).split('.');
-
-        }else{
-
-            // retira os pontos e vírgulas deixando somente números
-            value = value.replace(/\D/g, '');
-
-            this.decimalPart = value.substring(value.length - this.params.decimal_places);
-            this.integerPart = value.substring(0, value.length - this.params.decimal_places);
-        }
         
-        value = `${this.integerPart}${this.params.decimal_separator}${this.decimalPart}`;
-
+        let value = `${this.integerPart}${this.params.decimal_separator}${this.decimalPart}`;
         this.auxInput.value = value;
 
     }
@@ -276,6 +274,8 @@ export class IonicMaskDirective {
 
             value = `${IntPartFormated}${this.params.decimal_separator}${this.decimalPart}`;
             this.auxInput.value = value;
+
+            this._changeDetectorRef.detectChanges();
 
         }
 
