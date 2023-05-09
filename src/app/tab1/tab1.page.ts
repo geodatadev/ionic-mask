@@ -15,7 +15,7 @@ export class Tab1Page {
 
     ) { 
         this.form = this.fb.group({
-            prefixReal: [15415.6],
+            prefixReal: [null],
             prefixDolar: [null],
             sufix: [null],
             sufixFixed: [null],
@@ -25,6 +25,7 @@ export class Tab1Page {
     }
 
     ngOnInit() {
+        
     }
 
     submit(){

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Directive, ElementRef, HostListener, inject, Input } from '@angular/core';
+import { ChangeDetectorRef, Directive, ElementRef, inject, Input } from '@angular/core';
 
 @Directive({
     selector: '[ionic-mask]'
