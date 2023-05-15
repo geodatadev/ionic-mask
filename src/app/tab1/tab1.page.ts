@@ -26,12 +26,18 @@ export class Tab1Page {
     }
 
     ngOnInit() {
+        // setTimeout(() => {
         
+        //     this.form.get('prefixReal')?.setValue(123.52);
+        //     this.form.get('decimal_1')?.setValue(123.52);
+        //     this.form.get('decimal_2')?.setValue(123.52);
+        // }, 1800);
     }
 
     submit(){
 
         console.log(this.form.value);
+
 
     }
 

@@ -13,6 +13,7 @@ export class IonicMaskDirective {
     public auxInput: any;
     public defaultInput: any;
     public defaultValue: any;
+    public defaultValueWasSet: boolean = false;
 
     // inputs
     @Input('ionic-mask') dataMask: any = null;
@@ -85,22 +86,24 @@ export class IonicMaskDirective {
                 this.setMorpheme();
             }
             
-            // se há valor na inicialização então extrai parte decimal e inteira
-            if(this.defaultInput && this.defaultInput.value && !this.auxInput.value) {
-    
-                this.auxInput.value = this.defaultInput.value;
-                this.defaultValue = this.auxInput.value.replace(/\D\./g, '');
-                
-                // dividindo o valor em duas partes (integer e decimal)
-                [this.integerPart, this.decimalPart] = String(this.defaultValue).split('.');
-                if(this.integerPart && !this.decimalPart){
-                    this.decimalPart = 0;
-                }
-                
-                var event = new Event('input');          
-                this.auxInput.dispatchEvent(event);
-    
+        }
+        
+        // se há valor na inicialização então extrai parte decimal e inteira
+        if(!this.defaultValueWasSet && this.defaultInput && this.defaultInput.value && !this.auxInput.value) {
+
+            this.auxInput.value = this.defaultInput.value;
+            this.defaultValue = this.auxInput.value.replace(/\D\./g, '');
+            
+            // dividindo o valor em duas partes (integer e decimal)
+            [this.integerPart, this.decimalPart] = String(this.defaultValue).split('.');
+            if(this.integerPart && !this.decimalPart){
+                this.decimalPart = 0;
             }
+            
+            var event = new Event('input');          
+            this.auxInput.dispatchEvent(event);
+            
+            this.defaultValueWasSet = true;
         }
 
 
