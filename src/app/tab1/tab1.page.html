@@ -53,10 +53,18 @@
 
         <ion-item>
             <ion-label position="stacked">
+                Decimal places (0)
+            </ion-label>
+            <ion-input formControlName="decimal_1" type="text" [ionic-mask]="{ decimal_places: 0}" value=""></ion-input>
+            <ion-note>Output: {{form.value.decimal_1}}</ion-note>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="stacked">
                 Decimal places (3)
             </ion-label>
-            <ion-input formControlName="decimal" type="text" [ionic-mask]="{ decimal_places: 3}" value=""></ion-input>
-            <ion-note>Output: {{form.value.decimal}}</ion-note>
+            <ion-input formControlName="decimal_2" type="text" [ionic-mask]="{ decimal_places: 3}" value=""></ion-input>
+            <ion-note>Output: {{form.value.decimal_2}}</ion-note>
         </ion-item>
 
     

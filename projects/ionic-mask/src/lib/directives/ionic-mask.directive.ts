@@ -39,7 +39,7 @@ export class IonicMaskDirective {
             fixed_morpheme: this.dataMask.fixed_morpheme || false,
             thousand_separator: this.dataMask.thousand_separator || '.',
             decimal_separator: this.dataMask.decimal_separator || ',',
-            decimal_places: this.dataMask.decimal_places || 2,
+            decimal_places: (this.dataMask.decimal_places !== null && this.dataMask.decimal_places !== undefined) ? this.dataMask.decimal_places : 2,
         }
         
     }
@@ -58,6 +58,9 @@ export class IonicMaskDirective {
         
         this.defaultInput = this._ref.nativeElement.querySelector('input:not([ionic-mask-value-input-aux])');
         this.auxInput = this._ref.nativeElement.querySelector('input[ionic-mask-value-input-aux]');
+        this.defaultValue = null;
+        this.integerPart = null;
+        this.decimalPart = null;
 
         // Se há input padrão e não foi criado input auxiliar então cria o auxiliar para servir de "display"
         if(this.defaultInput && !this.auxInput) {
@@ -81,25 +84,25 @@ export class IonicMaskDirective {
 
                 this.setMorpheme();
             }
-
-        }
-
-        // se há valor na inicialização então extrai parte decimal e inteira
-        if(this.defaultInput && this.defaultInput.value && !this.auxInput.value) {
-
-            this.auxInput.value = this.defaultInput.value;
-            this.defaultValue = this.auxInput.value.replace(/\D\./g, '');
             
-            // dividindo o valor em duas partes (integer e decimal)
-            [this.integerPart, this.decimalPart] = String(this.defaultValue).split('.');
-            if(this.integerPart && !this.decimalPart){
-                this.decimalPart = 0;
+            // se há valor na inicialização então extrai parte decimal e inteira
+            if(this.defaultInput && this.defaultInput.value && !this.auxInput.value) {
+    
+                this.auxInput.value = this.defaultInput.value;
+                this.defaultValue = this.auxInput.value.replace(/\D\./g, '');
+                
+                // dividindo o valor em duas partes (integer e decimal)
+                [this.integerPart, this.decimalPart] = String(this.defaultValue).split('.');
+                if(this.integerPart && !this.decimalPart){
+                    this.decimalPart = 0;
+                }
+                
+                var event = new Event('input');          
+                this.auxInput.dispatchEvent(event);
+    
             }
-            
-            var event = new Event('input');          
-            this.auxInput.dispatchEvent(event);
-
         }
+
 
     }
 
@@ -108,8 +111,8 @@ export class IonicMaskDirective {
      */
     private apply() {
 
-        let value = this.defaultValue ? this.defaultValue : this.auxInput.value;
-        
+        let value = (this.defaultValue !== null && this.defaultValue !== undefined) ? this.defaultValue : this.auxInput.value;
+
         if (value) {
             // seta morphema(prefix ou sufix), se enviado
             this.setMorpheme();
@@ -130,7 +133,11 @@ export class IonicMaskDirective {
                     this.defaultValue = null;
                 }
                 
-                this.formatDecimalPlaces();
+                if(this.params.decimal_places){
+
+                    this.formatDecimalPlaces();
+                }
+                
                 this.formatSeparators();
 
             }
@@ -154,11 +161,23 @@ export class IonicMaskDirective {
 
         let val = null;
         
-        if(this.params.type == 'number' && this.decimalPart !== null && this.decimalPart !== "" ){
+        if(this.params.type == 'number' ){
             // para o tipo number monta formatação de acordo com os parametros
             
             let integerPart = this.integerPart || 0 ;
-            val = Number(`${integerPart}.${this.decimalPart}`);
+            let decimalPart = this.decimalPart || 0 ;
+
+            if(integerPart && decimalPart){
+
+                val = Number(`${integerPart}.${this.decimalPart}`);
+
+            } else if (integerPart){
+
+                val = Number(`${integerPart}`);
+
+            } else {
+                val = null;
+            }
 
         }else if(this.params.type != 'number' && this.auxInput.value){
             // para o tipo diferente de number (text), insere o valor sem formatação
@@ -177,7 +196,7 @@ export class IonicMaskDirective {
         }
         
         this.defaultInput.value = val;
-        
+
         var event = new Event('input');          
         this.defaultInput.dispatchEvent(event);
 
@@ -272,7 +291,14 @@ export class IonicMaskDirective {
 
             let IntPartFormated = String(this.integerPart).split(/(?=(?:...)*$)/).join(this.params.thousand_separator);
 
-            value = `${IntPartFormated}${this.params.decimal_separator}${this.decimalPart}`;
+            if(this.params.decimal_places){
+
+                value = `${IntPartFormated}${this.params.decimal_separator}${this.decimalPart}`;
+            }else{
+
+                value = IntPartFormated;
+            }
+
             this.auxInput.value = value;
 
             this._changeDetectorRef.detectChanges();

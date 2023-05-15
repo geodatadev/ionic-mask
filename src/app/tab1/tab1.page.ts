@@ -20,7 +20,8 @@ export class Tab1Page {
             sufix: [null],
             sufixFixed: [null],
             separators: [null],
-            decimal: [null],
+            decimal_1: [null],
+            decimal_2: [null],
         })
     }
 
