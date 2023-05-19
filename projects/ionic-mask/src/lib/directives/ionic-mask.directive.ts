@@ -170,15 +170,16 @@ export class IonicMaskDirective {
             let integerPart = this.integerPart || 0 ;
             let decimalPart = this.decimalPart || 0 ;
 
-            if(integerPart && decimalPart){
+            if((integerPart && decimalPart) || (!integerPart && decimalPart)){
 
                 val = Number(`${integerPart}.${this.decimalPart}`);
-
+                
             } else if (integerPart){
 
                 val = Number(`${integerPart}`);
-
+                
             } else {
+
                 val = null;
             }
 
